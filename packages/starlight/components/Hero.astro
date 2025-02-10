@@ -54,7 +54,7 @@ if (image) {
 				<div class="sl-flex actions">
 					{actions.map(
 						({ attrs: { class: className, ...attrs } = {}, icon, link, text, variant }) => {
-							const href = link.includes('http') ? link : pathWithBase(stripLeadingSlash(link));
+							const href = link.startsWith('http') ? link : pathWithBase(stripLeadingSlash(link));
 							return (
 								<LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
 									{text}
