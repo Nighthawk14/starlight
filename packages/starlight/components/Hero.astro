@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import { PAGE_TITLE_ID } from '../constants';
 import type { Props } from '../props';
 import LinkButton from '../user-components/LinkButton.astro';
+import { pathWithBase } from '../utils/base';
+import { stripLeadingSlash } from '../utils/path';
 
 const { data } = Astro.props.entry;
 const { title = data.title, tagline, image, actions = [] } = data.hero || {};
@@ -51,12 +53,15 @@ if (image) {
 			actions.length > 0 && (
 				<div class="sl-flex actions">
 					{actions.map(
-						({ attrs: { class: className, ...attrs } = {}, icon, link: href, text, variant }) => (
-							<LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
-								{text}
-								{icon?.html && <Fragment set:html={icon.html} />}
-							</LinkButton>
-						)
+						({ attrs: { class: className, ...attrs } = {}, icon, link, text, variant }) => {
+							const href = link.includes('http') ? link : pathWithBase(stripLeadingSlash(link));
+							return (
+								<LinkButton {href} {variant} icon={icon?.name} class:list={[className]} {...attrs}>
+									{text}
+									{icon?.html && <Fragment set:html={icon.html} />}
+								</LinkButton>
+							)
+						}
 					)}
 				</div>
 			)
